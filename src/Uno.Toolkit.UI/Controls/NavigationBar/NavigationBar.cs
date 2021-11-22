@@ -153,7 +153,7 @@ namespace Uno.Toolkit.UI.Controls
 						bitmapIcon.ShowAsMonochrome = bis.ShowAsMonochrome;
 
 						if (bis.Foreground is { } foreground)
-        {
+						{
 							bitmapIcon.Foreground = foreground;
 						}
 
