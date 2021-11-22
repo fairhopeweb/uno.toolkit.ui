@@ -12,11 +12,7 @@
     <Style x:Key="MaterialMainCommandStyle"
            TargetType="AppBarButton"
            BasedOn="{StaticResource BaseMaterialMainCommandStyle}">
-        <Setter Property="Icon">
-            <Setter.Value>
-                <SymbolIcon Symbol="Back" />
-            </Setter.Value>
-        </Setter>
+        
     </Style>
 
     <Style x:Key="MaterialNavigationBarStyle"
@@ -24,6 +20,9 @@
 		   BasedOn="{StaticResource BaseMaterialNavigationBarStyle}">
         <Setter Property="MainCommandStyle"
 				Value="{StaticResource MaterialMainCommandStyle}" />
+        <Setter Property="MainCommandIconSource" Value="{StaticResource BackIconSource}" />
+
+
     </Style>
 
     <Style x:Key="MaterialModalMainCommandStyle"
@@ -31,11 +30,6 @@
            BasedOn="{StaticResource BaseMaterialMainCommandStyle}">
         <Setter Property="Foreground"
                 Value="{ThemeResource MaterialOnSurfaceBrush}" />
-        <Setter Property="Icon">
-            <Setter.Value>
-                <SymbolIcon Symbol="Back" />
-            </Setter.Value>
-        </Setter>
     </Style>
     
     <Style x:Key="MaterialModalNavigationBarStyle"
@@ -43,5 +37,7 @@
            BasedOn="{StaticResource BaseMaterialModalNavigationBarStyle}">
         <Setter Property="MainCommandStyle"
                 Value="{StaticResource MaterialModalMainCommandStyle}" />
+        <Setter Property="MainCommandIconSource" Value="{StaticResource BackIconSource}" />
+
     </Style>
 </ResourceDictionary>

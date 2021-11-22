@@ -265,6 +265,20 @@ namespace Uno.Toolkit.UI.Controls
 			DependencyProperty.Register(nameof(MainCommandStyle), typeof(Style), typeof(NavigationBar), new PropertyMetadata(default(Style), OnPropertyChanged));
 		#endregion
 
+		#region MainCommandIconSource
+		/// <summary>
+		/// Gets or sets the IconSource that will be used for the MainCommand Icon
+		/// </summary>
+		public IconSource MainCommandIconSource
+		{
+			get { return (IconSource)GetValue(MainCommandIconSourceProperty); }
+			set { SetValue(MainCommandIconSourceProperty, value); }
+		}
+
+		public static DependencyProperty MainCommandIconSourceProperty { get; } =
+			DependencyProperty.Register(nameof(MainCommandIconSource), typeof(IconSource), typeof(NavigationBar), new PropertyMetadata(default(IconSource), OnPropertyChanged));
+		#endregion
+
 		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
 			var owner = (NavigationBar)sender;

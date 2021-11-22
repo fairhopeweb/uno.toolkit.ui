@@ -66,6 +66,8 @@ namespace Uno.Toolkit.UI.Controls
 		private SerialDisposable _backRequestedHandler = new SerialDisposable();
 		private SerialDisposable _frameBackStackChangedHandler = new SerialDisposable();
 		private WeakReference<Page?>? _pageRef;
+		private bool _isIconSourceSetByNavBar = false;
+		private bool _isMainCommandStyleSetByNavBar = false;
 
 		public NavigationBar()
 		{
@@ -90,6 +92,103 @@ namespace Uno.Toolkit.UI.Controls
 			_isNativeTemplate = _presenter is NativeNavigationBarPresenter;
 #endif
 		}
+
+#if !HAS_NATIVE_NAVBAR
+		private void UpdateMainCommandIconSource()
+		{
+			var iconSource = MainCommandIconSource;
+			if (iconSource is { })
+			{
+				var mainCommand = MainCommand;
+				var localValue = this.ReadLocalValue(NavigationBar.MainCommandIconSourceProperty);
+
+				if (localValue == DependencyProperty.UnsetValue || _isIconSourceSetByNavBar)
+				{
+					IconElement? icon = null;
+					if (iconSource is FontIconSource fis)
+					{
+						var fontIcon = new FontIcon();
+						fontIcon.Glyph = fis.Glyph;
+						fontIcon.FontSize = fis.FontSize;
+
+						if (fis.Foreground is { })
+						{
+							fontIcon.Foreground = fis.Foreground;
+						}
+
+						if (fis.FontFamily is { })
+						{
+							fontIcon.FontFamily = fis.FontFamily;
+						}
+
+						fontIcon.FontWeight = fis.FontWeight;
+						fontIcon.FontStyle = fis.FontStyle;
+						fontIcon.IsTextScaleFactorEnabled = fis.IsTextScaleFactorEnabled;
+						fontIcon.MirroredWhenRightToLeft = fis.MirroredWhenRightToLeft;
+
+						icon = fontIcon;
+					}
+					else if (iconSource is SymbolIconSource sis)
+					{
+						var symbolIcon = new SymbolIcon();
+
+						symbolIcon.Symbol = sis.Symbol;
+
+						if (sis.Foreground is { })
+						{
+							symbolIcon.Foreground = sis.Foreground;
+						}
+
+						icon = symbolIcon;
+					}
+					else if (iconSource is BitmapIconSource bis)
+					{
+						BitmapIcon bitmapIcon = new BitmapIcon();
+
+						if (bis.UriSource is { })
+						{
+							bitmapIcon.UriSource = bis.UriSource;
+						}
+
+						bitmapIcon.ShowAsMonochrome = bis.ShowAsMonochrome;
+
+						if (bis.Foreground is { } foreground)
+        {
+							bitmapIcon.Foreground = foreground;
+						}
+
+						icon = bitmapIcon;
+					}
+					else if (iconSource is PathIconSource pis)
+					{
+						PathIcon pathIcon = new PathIcon();
+
+						if (pis.Data is PathGeometry pathData)
+						{
+							pathIcon.Data = pis.Data;
+						}
+						if (pis.Foreground is { } newForeground)
+						{
+							pathIcon.Foreground = newForeground;
+						}
+
+						icon = pathIcon;
+					}
+
+					if (icon != null)
+					{
+						mainCommand.Icon = icon;
+						_isIconSourceSetByNavBar = true;
+					}
+					else
+					{
+						mainCommand.ClearValue(AppBarButton.IconProperty);
+						_isIconSourceSetByNavBar = false;
+					}
+				}
+			}
+		}
+#endif
 
 		internal bool TryPerformBack()
 		{
@@ -196,6 +295,7 @@ namespace Uno.Toolkit.UI.Controls
 		{
 			if (args.Property == MainCommandProperty)
 			{
+				UpdateMainCommandStyle();
 				UpdateMainCommandVisibility();
 			}
 			else if (args.Property == MainCommandModeProperty)
@@ -204,10 +304,33 @@ namespace Uno.Toolkit.UI.Controls
 			}
 			else if (args.Property == MainCommandStyleProperty)
 			{
-				var mainCommand = MainCommand;
-				if (MainCommand != null)
+				UpdateMainCommandStyle();
+			}
+#if !HAS_NATIVE_NAVBAR
+			else if (args.Property == MainCommandIconSourceProperty)
+			{
+				UpdateMainCommandIconSource();
+			}
+#endif
+		}
+
+		private void UpdateMainCommandStyle()
+		{
+			var mainCommand = MainCommand;
+			var localStyleValue = mainCommand.Style?.ReadLocalValue(StyleProperty);
+			var mainCommandStyle = MainCommandStyle;
+
+			if (localStyleValue == DependencyProperty.UnsetValue || _isMainCommandStyleSetByNavBar)
+			{
+				if (mainCommandStyle != null)
 				{
-					MainCommand.Style = args.NewValue as Style;
+					mainCommand.Style = mainCommandStyle;
+					_isMainCommandStyleSetByNavBar = true;
+				}
+				else
+				{
+					mainCommand.ClearValue(StyleProperty);
+					_isMainCommandStyleSetByNavBar = false;
 				}
 			}
 		}

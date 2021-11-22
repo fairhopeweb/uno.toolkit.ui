@@ -27,8 +27,10 @@
     <x:Double x:Key="MaterialNavigationBarElevation">4</x:Double>
 	<x:Double x:Key="MaterialNavigationBarHeight">48</x:Double>
     <Thickness x:Key="MaterialNavigationBarContentMargin">16,0,0,0</Thickness>
+    <x:String x:Key="BackIconData">M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z</x:String>
+    <PathIconSource x:Key="BackIconSource" Data="{StaticResource BackIconData}"/>
 
-	<ios:ControlTemplate x:Key="NativeNavigationBarTemplate"
+    <ios:ControlTemplate x:Key="NativeNavigationBarTemplate"
 						 TargetType="toolkitLib:NavigationBar">
 		<!-- We use BorderBrush instead of Background to ensure that semi-transparent background of Grid and NativeCommandBarPresenter don't add up -->
 		<Border BorderBrush="{TemplateBinding Background}"
@@ -63,7 +65,7 @@
 		</Setter>
 	</Style>
 
-<Style x:Key="MaterialNavigationBarCommandBar"
+	<Style x:Key="MaterialNavigationBarCommandBar"
 		   TargetType="CommandBar">
 		<Setter Property="Background"
 				Value="{ThemeResource CommandBarBackground}" />
