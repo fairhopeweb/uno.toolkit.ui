@@ -165,7 +165,7 @@ namespace Uno.Toolkit.UI.Controls
 
 						if (pis.Data is PathGeometry pathData)
 						{
-							pathIcon.Data = pis.Data;
+							pathIcon.Data = pathData;
 						}
 						if (pis.Foreground is { } newForeground)
 						{
